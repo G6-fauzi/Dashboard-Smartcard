@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Transaksi Harian</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dashboard Smartcard</h1>
+            <div class="date-display" id="currentDateDisplay">Hari ini: -</div>
+        </header>
+
+        <div class="controls">
+            <div class="form-group">
+                <label for="inputModal">🛠 Input Modal Awal (Rp)</label>
+                <input type="number" id="inputModal" placeholder="0" oninput="applyCalculation()" value="0" />
+            </div>
+
+            <div class="form-group">
+                <label for="filterShift">🕒 Pilih Shift</label>
+                <select id="filterShift" onchange="handleShiftChange()">
+                    <option value="All">Semua Jam (Hari Ini)</option>
+                    <option value="Pagi">Pagi (00:00 - 12:00)</option>
+                    <option value="Siang">Siang (12:01 - 18:00)</option>
+                    <option value="Malam">Malam (18:01 - 23:59)</option>
+                    <option value="Custom">Kustom (Pilih Jam)</option>
+                </select>
+                <div id="customTimeWrapper" style="display:none; gap:5px; margin-top:8px;">
+                    <input type="time" id="customStart" onchange="applyCalculation()" />
+                    <span style="align-self:center;">s/d</span>
+                    <input type="time" id="customEnd" onchange="applyCalculation()" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="filterTeller">👤 Filter Petugas</label>
+                <select id="filterTeller" onchange="applyCalculation()">
+                    <option value="All">Semua Petugas</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="loading">Mengambil data transaksi hari ini...</div>
+
+        <div id="dashboardContent" style="display:none;">
+            <div class="stats-grid">
+                <div class="card main-balance">
+                    <h3>Sisa Saldo Akhir</h3>
+                    <p id="finalBalance">Rp 0</p>
+                    <small style="color: #64748b">Modal + (Top Up & Reversal - Cash Out)</small>
+                </div>
+
+                <div class="card">
+                    <h3>Mutasi Transaksi</h3>
+                    <div class="detail-stats">
+                        <span class="inc">Masuk: <br /><b id="totalIn">Rp 0</b></span>
+                        <span class="out">Keluar: <br /><b id="totalOut">Rp 0</b></span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Jumlah Transaksi</h3>
+                    <p id="totalCount">0</p>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">No.</th> <th>Jam</th>
+                            <th>Petugas</th>
+                            <th>Tipe Transaksi</th>
+                            <th>Nominal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="action-footer">
+        <button onclick="openCorrectionMode()" class="btn-action-correction">
+            🛠 Koreksi
+        </button>
+        <p class="action-hint">Gunakan fitur ini untuk mencocokkan slip dengan data riwayat transaksi.</p>
+    </div>
+
+    <script src="script.js"></script>
+
+    <div id="correctionModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🛠 Koreksi Transaksi</h2>
+                <button onclick="closeCorrectionMode()" class="close-btn">&times;</button>
+            </div>
+            
+            <div class="correction-controls">
+                <input type="text" id="searchCorrection" placeholder="🔍 Cari Nama User..." oninput="renderCorrectionList()" />
+            </div>
+            
+            <div style="margin-bottom: 10px; font-size: 0.9rem; color: #64748b;">
+                Progress: <span id="checkedCount" style="font-weight:bold; color:var(--primary)">0</span> / <span id="totalCorrectionCount">0</span>
+            </div>
+
+            <div class="correction-list-wrapper">
+                <table class="correction-table">
+                    <thead>
+                        <tr>
+                            <th>User</th> 
+                            <th>Transaksi</th>
+                            <th>Nominal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="correctionBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

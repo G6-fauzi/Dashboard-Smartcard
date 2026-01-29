@@ -298,3 +298,12 @@ tr:hover {
     color: #94a3b8;
 }
 .row-checked td { border-bottom: none; }
+/* Tambahkan ini di bagian .tag-styles di style.css */
+.tag-other {
+    background-color: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+/* Tambahkan ini di bagian .detail-stats */
+.other { color: #64748b; }

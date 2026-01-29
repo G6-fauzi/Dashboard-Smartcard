@@ -207,7 +207,7 @@ function updateUI(data, modal) {
             let isMasuk = false;
             let labelClass = "";
 
-            if (jenis.includes("TOP UP") || jenis.includes("SETOR") || jenis.includes("REVERSAL")) {
+            if (jenis.includes("TOP UP") || jenis.includes("SETOR")) {
                 totalMasuk += amount;
                 isMasuk = true;
                 labelClass = "tag-in";
@@ -350,7 +350,7 @@ function renderCorrectionList() {
         const jenis = item.TRANSAKSI.toUpperCase();
         let color = "inherit";
         if (!item.isChecked) {
-            if (jenis.includes("TOP UP") || jenis.includes("SETOR") || jenis.includes("REVERSAL")) color = "var(--success)";
+            if (jenis.includes("TOP UP") || jenis.includes("SETOR")) color = "var(--success)";
             else if (jenis.includes("CASH OUT") || jenis.includes("TARIK")) color = "var(--danger)";
         }
 

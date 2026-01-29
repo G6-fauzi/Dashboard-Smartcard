@@ -207,11 +207,16 @@ function updateUI(data, modal) {
             let isMasuk = false;
             let labelClass = "";
 
-            if (jenis.includes("TOP UP") || jenis.includes("SETOR")) {
+            const cleanJenis = jenis.trim(); 
+            
+            // Daftar kata kunci EXACT MATCH (Sama Persis)
+            // Jika ada "REVERSAL TOP UP", dia tidak akan dianggap masuk sini.
+            if (["TOP UP", "SETOR"].includes(cleanJenis)) {
                 totalMasuk += amount;
                 isMasuk = true;
                 labelClass = "tag-in";
-            } else if (jenis.includes("CASH OUT") || jenis.includes("PENARIKAN") || jenis.includes("TARIK")) {
+            } 
+            else if (["CASH OUT", "PENARIKAN", "TARIK"].includes(cleanJenis)) {
                 totalKeluar += amount;
                 isMasuk = false;
                 labelClass = "tag-out";
